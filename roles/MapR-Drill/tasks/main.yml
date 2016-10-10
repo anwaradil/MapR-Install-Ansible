@@ -1,0 +1,10 @@
+################################################################################
+# Description: Role to  install and configure mapr-drill
+# Author: Anwar Adil ; aadil@mapr.com
+# #############################################################################
+
+# Tasks file for installing mapr-oozie
+- name: install mapr-drill
+  yum: name=mapr-drill state=present
+  notify: reconfigure roles
+

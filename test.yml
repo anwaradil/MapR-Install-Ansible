@@ -1,0 +1,7 @@
+- hosts: historyserver
+  become: yes
+  tasks:
+    - name: install historyserver
+      yum: name=mapr-historyserver state=present
+
+

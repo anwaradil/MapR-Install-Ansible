@@ -1,0 +1,15 @@
+###################################################################################################
+# Description: Playbook to Configure NFS
+# Author:Anwar Adil aadil@mapr.com
+####################################################################################################
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: create mountpoint for loopback NFS mountpoint
+      file: path=/mapr state=directory
+      
+
+    - name: add a warden-managed local NFS mount
+      template: src=./templates/mapr_fstab.j2 dest=/opt/mapr/conf/mapr_fstab mode=0644
+

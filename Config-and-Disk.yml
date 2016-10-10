@@ -1,0 +1,22 @@
+###################################################################################################
+# Description: Playbook to run configure.sh and disksetup
+# Author: Anwar Adil ; aadil@mapr.com
+# ##################################################################################################
+
+ - hosts: newnodes
+   tasks:
+    # - name: write configure script (configure)
+     #  template: src=./templates/do_configure.sh dest=/tmp/do_configure.sh mode=0700 owner=root group=root
+
+#     - name: configure cluster nodes
+#       command: /opt/mapr/server/configure.sh  -N prod01.chi -M7 -C {% for node in groups['cldb'] -%}{{ hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %} -Z {% for node in groups['zookeepers'] -%}{{ hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %} -no-autostart -HS {% for node in groups['historyserver'] -%}{{hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %} 
+#    - name: Debug 
+#      debug: msg="/opt/mapr/server/configure.sh  -N prod01.chi -M7 -C {% for node in groups['cldb'] -%}{{ hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %} -Z {% for node in groups['zookeepers'] -%}{{ hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %} -no-autostart -HS {% for node in groups['historyserver'] -%}{{hostvars[node].ansible_fqdn }}{% if not loop.last %},{% endif %}{% endfor %}"
+ 
+#    - name: write out disk config
+#      template: src=./templates/disks.txt dest=/tmp/disks.txt mode=0644 owner=root group=root
+     
+     - name: add the disks
+       command: /opt/mapr/server/disksetup -F -W 4 /tmp/disks.txt
+#      when: "disklist is defined and disklist.stdout.find('MapR-FS') == -1"
+

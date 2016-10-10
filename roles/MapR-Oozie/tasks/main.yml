@@ -1,0 +1,18 @@
+################################################################################
+# Description: Role to  install and configure oozie
+# Author: Anwar Adil ; aadil@mapr.com
+# #############################################################################
+
+# Tasks file for installing mapr-oozie
+- name: install mapr-oozie
+  yum: name=mapr-oozie state=present
+  
+
+- name: copy core-site.xml
+  template: src=./templates/core-site.xml.j2  dest=/opt/mapr/hadoop/hadoop-2.7.0/etc/hadoop/core-site.xml
+  notify: reconfigure roles
+
+- name: export oozie url
+  shell: export OOZIE_URL=http://{{hostvars[node].ansible_fqdn}}:11000/oozie
+
+

@@ -1,0 +1,4 @@
+####Install Pig###########
+
+     - name: install mapr-pig
+       yum: name=mapr-pig state=present

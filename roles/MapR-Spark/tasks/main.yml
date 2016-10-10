@@ -1,0 +1,44 @@
+# Task file to configure spark on Yarn
+
+- name: does apps spark directory exist?
+  command: hadoop fs -test -d /apps/spark
+  become_user: mapr
+  register: appspark_exists
+  failed_when: appspark_exists.rc not in (0,1,255)
+
+- name: create app spark directory
+  command: hadoop fs -mkdir -p /apps/spark
+  become_user: mapr
+# # when: appspark_exists.rc in (1,255)
+  notify: reconfigure roles
+
+- name: chmod permission of /apps/spark directory
+  shell: hadoop fs -chmod 770  /apps/spark 
+
+#- name: install spark
+#  yum: name=mapr-spark state=present disable_gpg_check=yes
+
+#- name: install spark history-server
+#  yum: name=mapr-spark-historyserver state=present disable_gpg_check=yes
+#  notify: reconfigure roles
+
+  
+
+#- name: copy spark-defaults conf
+#  template: src=spark-defaults-conf.j2 dest=/opt/mapr/spark/conf/spark-defaults.conf mode=0644 owner=root group=root
+
+#DO NOT COPY IF ASSEMBLY JAR ALREADY PRESENT 
+#- name: copyFromLocal spark-assembly
+#  shell: hadoop fs -copyFromLocal /opt/mapr/spark/spark-1.6.1/lib/spark-assembly-1.6.1-hadoop2.7.0-mapr-1602.jar /apps/spark/spark-assembly-1.6.1-hadoop2.7.0-mapr-1602.jar
+
+- name: chmod permission of /apps/spark directory
+  shell: hadoop fs -chown mapr:mapr  /apps/spark/spark-assembly-1.6.1-hadoop2.7.0-mapr-1602.jar
+
+- name: chmod permission of /apps/spark directory
+  shell: hadoop fs -chmod 777  /apps/spark/spark-assembly-1.6.1-hadoop2.7.0-mapr-1602.jar
+
+- name: add a new string at the end of the file
+  lineinfile: dest=/opt/mapr/spark/spark-1.6.1/conf/spark-defaults.conf
+                regexp=''
+                insertafter=EOF
+                line='spark.yarn.jar      maprfs:///apps/spark/spark-assembly-1.6.1-hadoop2.7.0-mapr-1602.jar'

@@ -1,0 +1,52 @@
+###################################################################################################
+# Description: Install and Configure MapR Ecosystem Components
+# Author: Anwar Adil ; aadil@mapr.com
+# ################################################################################################
+
+# - hosts: master
+#   become: yes
+#   tags:
+#     - hive
+#   roles:
+#     - { role: MapR-Hive}
+
+# - hosts: master
+#   tasks:
+#      - name: copy hive-site.xml into place
+#        template: src=./templates/hive-site.xml.j2  dest=/opt/mapr/hive/hive-1.2/conf/hive-site.xml
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install MapR-Spark
+      yum: name=mapr-spark state=present
+  
+- hosts: sparkhistory
+  become: yes
+  tasks:
+    - name: Install Spark-History
+      yum: name=mapr-spark-historyserver state=present
+
+- hosts: all
+  become: yes
+  tags:
+     - spark
+  roles:
+      - MapR-Spark
+    
+ - hosts: all
+   become: yes
+   roles:
+     - MapR-Drill
+
+
+- hosts: pig
+  become: yes
+  roles:
+     - MapR-Pig
+
+- hosts: pig
+  become: yes
+  roles:
+    - MapR-Oozie
+
