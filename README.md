@@ -1,4 +1,7 @@
 # MapR-Install-Ansible
+
+Note : This repo is just a sample snapshot of the scripts that I have developed.For complete scripts send me an email - aadil@mapr.com
+
 Things to improve:
 
 10/10/2016
